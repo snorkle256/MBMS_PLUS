@@ -17,6 +17,8 @@ services:
           fi
         fi
         echo "OK: replication token check passed."
+    env_file:
+      - ./.env
     restart: "no"
 
   bootstrap:

@@ -46,12 +46,20 @@ Edit `.env` (top section) before first run:
 docker compose up -d
 ```
 
-When finished, your MusicBrainz mirror will be available at http://HOST_IP_Address:5000
-The Lidarr API bridge will accept connections at the same address on port 5001
+## Wrap-up
+
+You can monitor the progress of the long database jobs:
+
+```
+docker compose logs -f --no-log-prefix bootstrap
+```
+
+When finished, your MusicBrainz mirror will be available at **http://HOST_IP_Address:5000**
+<br>The Lidarr API bridge will accept connections at the same address on port 5001
 
 > [!TIP]
 >
-> Put a reverse proxy (NPM, Caddy, Traefik, SWAG) in front of your host IP and use your own (sub)domain to reach your MusicBrainz mirror on port 80 or 443 (HTTPS).
+> Put a reverse proxy (NPM, Caddy, Traefik, SWAG) in front of your host IP and use your own (sub)domain to reach your MusicBrainz mirror on port 80 (HTTP) or 443 (HTTPS).
 
 ## Notes
 

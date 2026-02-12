@@ -2,22 +2,30 @@
   <img src="https://raw.githubusercontent.com/HVR88/LM-Bridge-DEV/main/assets/lmbridge-icon.png" alt="LM Bridge" width="500" />
 </p>
 
-# MBMS_PLUS
+# MBMS PLUS
 
 **_MusicBrainz Mirror Server PLUS - Full stack with Lidarr API Bridge_**
 
 ## Quick start
 
+### Register for MusicBrainz access
+
+1. Create an account at MusicBrainz.com
+2. Get your _Live Data Feed Access Token_ from Metabrainz https://metabrainz.org/profile
+
+### Download the pre-built containers
+
 ```bash
 git clone https://github.com/HVR88/MBMS_PLUS.git
+
 cd MBMS_PLUS
-docker compose up -d
 ```
 
-## Configure
+### Minimally Configure .env
 
 Edit `.env` (top section) before first run:
 
+- Remove the `NO_OP` line from the **.env** file
 - `MUSICBRAINZ_REPLICATION_TOKEN` (required for replication)
 - `MUSICBRAINZ_WEB_SERVER_HOST` / `MUSICBRAINZ_WEB_SERVER_PORT` as needed
 - Optional provider keys for LM-Bridge (FANART/LASTFM/SPOTIFY)

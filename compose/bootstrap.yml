@@ -1,6 +1,20 @@
 # Description: Bootstrap DB, materialized tables, and prebuilt Solr indexes
 
 services:
+  preflight:
+    image: alpine:3.20
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        if [ -n "${MUSICBRAINZ_REPLICATION_ENABLED:-1}" ] && [ "${MUSICBRAINZ_REPLICATION_ENABLED}" != "0" ] && [ "${MUSICBRAINZ_REPLICATION_ENABLED}" != "false" ]; then
+          if [ -z "${MUSICBRAINZ_REPLICATION_TOKEN:-}" ]; then
+            echo "Missing MUSICBRAINZ_REPLICATION_TOKEN. Set it in .env before running docker compose up." >&2
+            exit 1
+          fi
+        fi
+        echo "OK: replication token check passed."
+    restart: "no"
+
   bootstrap:
     build:
       context: build/bootstrap
@@ -22,6 +36,8 @@ services:
     command: ["bootstrap.sh"]
     restart: "no"
     depends_on:
+      preflight:
+        condition: service_completed_successfully
       db:
         condition: service_started
 
@@ -46,6 +62,8 @@ services:
       - ./build/solr/scripts/bootstrap-indexes.sh:/usr/local/bin/bootstrap-indexes.sh:ro
     restart: "no"
     depends_on:
+      preflight:
+        condition: service_completed_successfully
       bootstrap:
         condition: service_completed_successfully
 
@@ -56,6 +74,8 @@ services:
 
   musicbrainz:
     depends_on:
+      preflight:
+        condition: service_completed_successfully
       db:
         condition: service_started
       mq:

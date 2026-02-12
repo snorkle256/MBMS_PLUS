@@ -6,12 +6,8 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        if [ -n "${NO_OP:-}" ]; then
-          echo "Please review and edit the .env file before proceeding with docker compose up." >&2
-          exit 1
-        fi
-        if [ -z "${COMPOSE_PROFILES:-}" ]; then
-          echo "Please set COMPOSE_PROFILES=mbms in .env before running docker compose up." >&2
+        if [ -z "${COMPOSE_PROFILES:-}" ] || ! printf ',%s,' "${COMPOSE_PROFILES}" | grep -q ',mbms,'; then
+          echo "Please uncomment COMPOSE_PROFILES=mbms in .env before running docker compose up." >&2
           exit 1
         fi
         if [ -n "${MUSICBRAINZ_REPLICATION_ENABLED:-1}" ] && [ "${MUSICBRAINZ_REPLICATION_ENABLED}" != "0" ] && [ "${MUSICBRAINZ_REPLICATION_ENABLED}" != "false" ]; then

@@ -26,8 +26,7 @@ cd /opt/docker/MBMS_PLUS
 
 Edit `.env` (top section) before first run:
 
-- Remove the `NO_OP` line from the **.env** file
-- Set `COMPOSE_PROFILES=mbms`
+- Uncomment `COMPOSE_PROFILES=mbms`
 - `MUSICBRAINZ_REPLICATION_TOKEN` (required for replication)
 - `MUSICBRAINZ_WEB_SERVER_HOST` ('localhost' default, edit as needed)
 - `MUSICBRAINZ_WEB_SERVER_PORT` ('5000' default, edit as needed)

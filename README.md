@@ -20,12 +20,14 @@ _It's recommended to install onto a volume with at least 500GB free to allow for
 
 ## Quick start
 
-### 1. Register for MusicBrainz access - REQUIRED
+### 1. Register for MusicBrainz access (REQUIRED)
 
 - Create an account at https://MusicBrainz.com
 - Get your _Live Data Feed Access Token_ from Metabrainz https://metabrainz.org/profile
 
-### 2. Download the MBMS_PLUS project - Small and quick download
+### 2. Download the MBMS_PLUS project
+
+Small and quick download
 
 ```
 mkdir -p /opt/docker/
@@ -34,7 +36,7 @@ git clone https://github.com/HVR88/MBMS_PLUS.git
 cd /opt/docker/MBMS_PLUS
 ```
 
-### 3. Minimally Configure .env file - REQUIRED
+### 3. Minimally Configure .env file (REQUIRED)
 
 Edit `.env` (top section) before first run:
 
@@ -44,7 +46,9 @@ Edit `.env` (top section) before first run:
 - `MUSICBRAINZ_WEB_SERVER_PORT` ('5000' default, edit as needed)
 - Optional provider keys/tokens for LM-Bridge (Cover Art Archive/Fanart/Last.FM)
 
-### 4. Start the containers download and startup - 300GB and takes hours to build/index
+### 4. Download containers, build DB & startup
+
+3.5GB container download and then 300GB data download. The DB build & indexing takes hours to complete.
 
 ```
 docker compose up -d
@@ -52,10 +56,17 @@ docker compose up -d
 
 ## Wrap-up
 
-You can monitor the progress of the long database jobs:
+You can monitor the progress of the long compose jobs:
 
 ```
-docker compose logs -f --no-log-prefix bootstrap
+docker compose logs -f --timestamps
+```
+
+Or with less "noise"
+
+```
+docker compose logs -f --no-log-prefix \
+  bootstrap search-bootstrap search musicbrainz indexer indexer-cron lmbridge
 ```
 
 When finished, your MusicBrainz mirror will be available at **http://HOST_IP_Address:5000**

@@ -78,9 +78,10 @@ When finished, your MusicBrainz mirror will be available at **http://HOST_IP:500
 - _The first import and database setup will take multiple hours and requires up to 300GB of available storage_
 - Building Materialized/denormalized tables consumes additioonal storage but offers significant performance improvements
 - 60GB of pre-built search indexes are downloaded to save a significant amount of time building new indexes
-- This stack is configured for private use on a LAN behind a firewall; don't expose services publicly without hardening
+- This stack is configured for private use on a LAN, behind a firewall
+- _Don't expose services publicly without hardening_
 
-> [!INFORMATION]
+> [!INFO]
 >
 > MBMS PLUS is for personal use: **NO COMMERCIAL OR BUSINESS USE IS PERMITTED.**
 

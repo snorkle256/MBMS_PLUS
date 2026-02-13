@@ -6,20 +6,19 @@
 
 ## Introduction
 
-The initial "compose up" will start with a 3.5GB download and the full installation, during and after setup, will ened an additional 300GB and a few hours to run.
-
-_To allow for future replication and updates, it's recommended to install onto a volume with at least 400-500GB of available storage space._
-
 > [!TIP]
 >
 > When deploying from a terminal, use screen or tmux so the compose process can continue running if your session drops (closing the window, computer goes to sleep, etc.)
 
 ## Requirements
 
-- Linux server / VM / LXC with Docker Compose
-- Unraid + Docker Compose Manager
-- Portainer
-- TrueNAS
+- Docker Host - examples:
+  - Linux server / VM / LXC with Docker Compose
+  - Unraid + Docker Compose Manager
+  - Portainer
+- 300 GB of available storage (400-500 GB recommended)
+- 8 GB of memory availbale to the container
+- 2-4 hours installation time
 
 ## Quick start
 

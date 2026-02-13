@@ -78,6 +78,7 @@ When finished, your MusicBrainz mirror will be available at **http://HOST_IP:500
 - _The first import and database setup will take multiple hours and requires up to 300GB of available storage_
 - Building Materialized/denormalized tables consumes additioonal storage but offers significant performance improvements
 - 60GB of pre-built search indexes are downloaded to save a significant amount of time building new indexes
+- _Continued (scheduled) replication and indexing is required to keep the database up-to-date and at optimal performance_
 - This stack is configured for private use on a LAN, behind a firewall
 - _Don't expose services publicly without hardening_
 
@@ -88,3 +89,14 @@ When finished, your MusicBrainz mirror will be available at **http://HOST_IP:500
 ### Source code, licenses and development repo:
 
 https://github.com/HVR88/musicbrainz_stack-DEV
+
+## Maintenance (optional)
+
+These helper scripts live in `admin/` in the deploy repo and can be used at any time while the stack is running:
+
+- `admin/status` (show container status)
+- `admin/logs [services...]` (follow logs)
+- `admin/restart [services...]` (restart services)
+- `admin/replicate-now` (trigger replication immediately)
+- `admin/reindex-now` (trigger search reindex)
+- `admin/bootstrap-reset` (clear bootstrap markers; prompts for confirmation)

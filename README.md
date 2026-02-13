@@ -2,11 +2,11 @@
   <img src="https://raw.githubusercontent.com/HVR88/LM-Bridge-DEV/main/assets/lmbridge-icon.png" alt="LM Bridge" width="500" />
 </p>
 
-# MBMS PLUS
+# <p align="center">**_MusicBrainz Mirror Server PLUS_**<br><sub>**Full stack with Lidarr API Bridge**</sub></p>
 
-**_MusicBrainz Mirror Server PLUS - Full stack with Lidarr API Bridge_**
+## Introduction
 
-The initial "compose up" will start with a 3.5GB download and the full installation, during and after setup, needs an additional 300GB and a few hours to run.
+The initial "compose up" will start with a 3.5GB download and the full installation, during and after setup, will ened an additional 300GB and a few hours to run.
 
 _To allow for future replication and updates, it's recommended to install onto a volume with at least 400-500GB of available storage space._
 

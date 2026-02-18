@@ -4,7 +4,7 @@ FROM ubuntu:24.04
 ARG GITHUB_TOKEN
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 2. Install all dependencies (Explicitly including libicu-dev and pkg-config)
+# 2. Install all dependencies
 RUN apt-get update && apt-get install -y \
     supervisor \
     postgresql-16 \
@@ -26,22 +26,17 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Build MusicBrainz Postgres Extensions
+# 3. Build MusicBrainz Postgres Extensions (Cloning direct source repos)
 WORKDIR /src
-RUN git clone --depth 1 https://github.com/metabrainz/musicbrainz-docker.git
 
-# Build Collate (With explicit path finding and debug logs)
-RUN export COLLATE_DIR=$(find /src/musicbrainz-docker -name "musicbrainz-collate" -type d | head -n 1) && \
-    echo "Found Collate at: $COLLATE_DIR" && \
-    cd "$COLLATE_DIR" && \
-    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config && \
+# Build Collate
+RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-collate.git && \
+    cd postgresql-musicbrainz-collate && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config install
 
 # Build Unaccent
-RUN export UNACCENT_DIR=$(find /src/musicbrainz-docker -name "musicbrainz-unaccent" -type d | head -n 1) && \
-    echo "Found Unaccent at: $UNACCENT_DIR" && \
-    cd "$UNACCENT_DIR" && \
-    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config && \
+RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-unaccent.git && \
+    cd postgresql-musicbrainz-unaccent && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config install
 
 # 4. Clone and Setup Your Forked Repositories

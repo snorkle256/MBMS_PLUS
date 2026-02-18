@@ -1,5 +1,5 @@
-# 1. Base Image
-FROM ubuntu:24.04
+# 1. Base Image - Reverting to 22.04 for better extension compatibility
+FROM ubuntu:22.04
 
 ARG GITHUB_TOKEN
 ENV DEBIAN_FRONTEND=noninteractive
@@ -7,15 +7,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 # 2. Install all dependencies
 RUN apt-get update && apt-get install -y \
     supervisor \
-    postgresql-16 \
-    postgresql-server-dev-16 \
+    postgresql-14 \
+    postgresql-server-dev-14 \
     git \
     curl \
     build-essential \
     pkg-config \
     libdb-dev \
     libicu-dev \
-    icu-devtools \
     libpq-dev \
     libssl-dev \
     libxml2-dev \
@@ -26,18 +25,20 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Build MusicBrainz Postgres Extensions (Cloning direct source repos)
+# 3. Build MusicBrainz Postgres Extensions
 WORKDIR /src
 
-# Build Collate
+# Build Collate - Added with_llvm=no to bypass Clang errors
 RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \
-    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config install
+    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config with_llvm=no && \
+    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config with_llvm=no install
 
 # Build Unaccent
 RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-unaccent.git && \
     cd postgresql-musicbrainz-unaccent && \
-    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config install
+    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config with_llvm=no && \
+    make PG_CONFIG=/usr/lib/postgresql/14/bin/pg_config with_llvm=no install
 
 # 4. Clone and Setup Your Forked Repositories
 WORKDIR /app
@@ -49,7 +50,7 @@ RUN git clone https://snorkle256:${GITHUB_TOKEN}@github.com/snorkle256/LM-Bridge
     cd lm-bridge && \
     npm install
 
-# 5. Environment Variables
+# 5. Environment Variables (Back to PG14 paths)
 ENV MB_DB_HOST=127.0.0.1
 ENV MB_DB_PORT=5432
 ENV BRIDGE_PORT=5001

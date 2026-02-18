@@ -4,19 +4,22 @@ FROM perl:5.38
 ARG GITHUB_TOKEN
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 2. Install System Dependencies 
-# (Added libgnutls28-dev and gnupg for the GnuPG module)
-RUN apt-get update && apt-get install -y \
+# 2. Add PostgreSQL Official Repository & Install Dependencies
+RUN apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release && \
+    curl -fSsL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && \
+    apt-get install -y \
     supervisor \
     postgresql-14 \
     postgresql-server-dev-14 \
-    git curl build-essential pkg-config \
+    git build-essential pkg-config \
     libdb-dev libicu-dev libpq-dev libssl-dev libxml2-dev \
     libgnutls28-dev gnupg \
     nodejs npm sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# 3. Build MusicBrainz Postgres Extensions
+# 3. Build MusicBrainz Postgres Extensions (Rest remains the same)
 WORKDIR /src
 RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \

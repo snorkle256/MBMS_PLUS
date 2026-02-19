@@ -14,9 +14,10 @@ RUN apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release 
     libpq-dev libssl-dev libxml2-dev libgnutls28-dev gnupg \
     nodejs npm sudo && rm -rf /var/lib/apt/lists/*
 
-# 2. Build Extensions for PG16
+# 2. Build Extensions (Using your Token + your Fork)
 WORKDIR /src
-RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-collate.git && \
+
+RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
 
@@ -24,7 +25,7 @@ RUN git clone --depth 1 https://github.com/metabrainz/postgresql-musicbrainz-una
     cd postgresql-musicbrainz-unaccent && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
 
-# 3. Clone and Setup Repos
+# 3. Clone and Setup App Repos
 WORKDIR /app
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/musicbrainz-server.git && \
     cd musicbrainz-server && cpanm --installdeps .

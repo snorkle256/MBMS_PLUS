@@ -14,21 +14,20 @@ RUN apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release 
     libpq-dev libssl-dev libxml2-dev libgnutls28-dev gnupg \
     nodejs npm sudo && rm -rf /var/lib/apt/lists/*
 
+
 # 2. Build Collate (Your Fork)
 WORKDIR /src
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
-    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config \
-         CFLAGS="-I/usr/include/postgresql/16/server -fPIC" \
-         with_llvm=no install
+    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config install
 
 # 3. Build Unaccent (Your Fork)
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-unaccent.git && \
     cd postgresql-musicbrainz-unaccent && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
-    CFLAGS="-I/usr/include/postgresql/16/server -fPIC" \
-    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
+    make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config install
+
 
 # 4. Main App Setup
 WORKDIR /app

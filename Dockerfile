@@ -30,7 +30,7 @@ RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postg
     cd postgresql-musicbrainz-unaccent && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config \
-         PG_CPPFLAGS="-I/usr/include/postgresql/16/server" \
+         PG_CPPFLAGS="-I/usr/include/postgresql/16/server -I/usr/include/postgresql/16/server/tsearch" \
          with_llvm=no install
     
 # 4. Main App Setup

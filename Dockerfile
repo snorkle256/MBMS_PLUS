@@ -20,14 +20,15 @@ WORKDIR /src
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-collate.git && \
     cd postgresql-musicbrainz-collate && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
-    CPATH="/usr/include/postgresql/16/server" \
+    # Using 'env' ensures the variable is passed to the make process correctly
+    env PG_CPPFLAGS="-I/usr/include/postgresql/16/server" \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
 
 # 3. Build Unaccent
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-unaccent.git && \
     cd postgresql-musicbrainz-unaccent && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
-    CPATH="/usr/include/postgresql/16/server" \
+    env PG_CPPFLAGS="-I/usr/include/postgresql/16/server" \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config with_llvm=no install
     
 # 4. Main App Setup

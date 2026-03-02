@@ -28,6 +28,8 @@ RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postg
 # 3. Build Unaccent
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postgresql-musicbrainz-unaccent.git && \
     cd postgresql-musicbrainz-unaccent && \
+    # DEBUG: Show us exactly what files exist and where they are
+    ls -R && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config clean && \
     make PG_CONFIG=/usr/lib/postgresql/16/bin/pg_config \
          PG_CPPFLAGS="-I/usr/include/postgresql/16/server -I/usr/include/postgresql/16/server/tsearch -I." \

@@ -57,7 +57,15 @@ RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/music
 
 
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/LM-Bridge.git && \
-    cd LM-Bridge && npm install
+    cd LM-Bridge && \
+    # Install Python dependencies
+    if [ -f "requirements.txt" ]; then \
+        pip install --no-cache-dir -r requirements.txt; \
+    elif [ -f "pyproject.toml" ]; then \
+        pip install --no-cache-dir .; \
+    else \
+        echo "Searching for Python files..." && ls -F; \
+    fi
 
 # 5. Configs
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

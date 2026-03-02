@@ -37,8 +37,20 @@ RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/postg
     
 # 4. Main App Setup
 WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    libgpgme-dev \
+    libssl-dev \
+    libxml2-dev \
+    libexpat1-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/musicbrainz-server.git && \
-    cd musicbrainz-server && cpanm --installdeps .
+    cd musicbrainz-server && \
+    # First, force-install the specific troublemakers
+    cpanm --notest GnuPG Authen::Passphrase Test::Aggregate XML::RSS::Parser::Lite Test::Mock::Class && \
+    # Then run the rest of the dependencies
+    cpanm --installdeps --notest .
+
 
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/LM-Bridge.git && \
     cd LM-Bridge && npm install

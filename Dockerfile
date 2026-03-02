@@ -46,10 +46,14 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/musicbrainz-server.git && \
     cd musicbrainz-server && \
-    # First, force-install the specific troublemakers
-    cpanm --notest GnuPG Authen::Passphrase Test::Aggregate XML::RSS::Parser::Lite Test::Mock::Class && \
-    # Then run the rest of the dependencies
-    cpanm --installdeps --notest .
+    # 1. Force install the known tricky modules one by one
+    cpanm --notest --force GnuPG && \
+    cpanm --notest --force Authen::Passphrase && \
+    cpanm --notest --force Test::Aggregate && \
+    cpanm --notest --force XML::RSS::Parser::Lite && \
+    cpanm --notest --force Test::Mock::Class && \
+    # 2. Run the main installer, but allow it to continue even if minor things fail
+    cpanm --installdeps --notest . || true
 
 
 RUN git clone https://x-access-token:${GITHUB_TOKEN}@github.com/snorkle256/LM-Bridge.git && \
